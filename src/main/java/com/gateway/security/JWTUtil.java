@@ -5,6 +5,10 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gateway.model.Usuario;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,9 +22,17 @@ public class JWTUtil {
 	@Value("${jwt.expiration}")
 	private Long expiration;
 
-	public String generateToken(String username) {
-		return Jwts.builder().setSubject(username).setExpiration(new Date(System.currentTimeMillis() + expiration))
-				.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
+	public String generateToken(Usuario user) {
+		ObjectMapper mapper = new ObjectMapper();
+		String userJson;
+		try {
+			userJson = mapper.writeValueAsString(user);
+			return Jwts.builder().claim("user", userJson).setSubject(user.getNome()).setExpiration(new Date(System.currentTimeMillis() + expiration))
+					.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return null;	
 	}
 
 	public boolean tokenValido(String token) {

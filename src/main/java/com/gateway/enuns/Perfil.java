@@ -1,15 +1,13 @@
 package com.gateway.enuns;
 
-
 public enum Perfil {
-	
-		ADMIN(1, "ROLE_ADMIN"),
-		CLIENTE(2, "ROLE_CLIENTE");
+
+	ADMIN(1, "ROLE_ADMIN"), CLIENTE(2, "ROLE_CLIENTE");
 
 	private int cod;
 	private String descricao;
-	
-	private Perfil(int cod, String descricao){
+
+	private Perfil(int cod, String descricao) {
 		this.cod = cod;
 		this.descricao = descricao;
 	}
@@ -29,18 +27,31 @@ public enum Perfil {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	
-	public static Perfil toEnum(Integer cod){
-		
-		if(cod == null){
+
+	public static Perfil toEnum(Integer cod) {
+
+		if (cod == null) {
 			return null;
 		}
-		for(Perfil x : Perfil.values()){
-			if(cod.equals(x.getCod())){
+		for (Perfil x : Perfil.values()) {
+			if (cod.equals(x.getCod())) {
 				return x;
 			}
 		}
-		throw new IllegalArgumentException("Id inválido: "+ cod);
+		throw new IllegalArgumentException("Id inválido: " + cod);
+	}
+
+	public static Perfil toEnumByDescricao(String descricao) {
+
+		if (descricao == null) {
+			return null;
+		}
+		for (Perfil x : Perfil.values()) {
+			if (descricao.equals(x.descricao)) {
+				return x;
+			}
+		}
+		throw new IllegalArgumentException("Id inválido: " + descricao);
 	}
 
 }

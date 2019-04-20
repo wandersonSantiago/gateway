@@ -1,6 +1,7 @@
 package com.gateway.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,6 +14,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.springframework.security.access.prepost.PreFilter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gateway.enuns.Perfil;
@@ -34,6 +39,13 @@ public class Usuario implements Serializable {
 	private Set<Integer> perfis = new HashSet<>();
 	
 	public Usuario() {
+	}
+
+	public Usuario(Integer id2, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+		id = id2;
+		nome = username;
+		senha = password;
+		perfis = authorities.stream().map(x -> Perfil.toEnumByDescricao(x.getAuthority()).getCod()).collect(Collectors.toSet());
 	}
 
 	public String getNome() {

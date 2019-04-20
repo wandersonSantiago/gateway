@@ -1,0 +1,19 @@
+zuul:
+  routes:
+    users:
+      path: /cliente/**
+      sensitiveHeaders: Cookie,Set-Cookie,Authorization,Test
+      url: http://localhost:8090
+
+server:  port: 8080    
+   
+spring:
+  datasource:
+    url: jdbc:h2:~/gateway
+    username: sa
+    password:
+     
+     
+      
+jwt.secret : SequenciaDeCaracteresParaAssinarToken
+jwt.expiration : 600000

@@ -8,11 +8,13 @@ import com.netflix.zuul.ZuulFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class SimpleFilter extends ZuulFilter {
 
   private static Logger log = LoggerFactory.getLogger(SimpleFilter.class);
-
+  @Autowired
+  private HttpServletRequest rq;
   @Override
   public String filterType() {
     return "pre";
@@ -30,11 +32,9 @@ public class SimpleFilter extends ZuulFilter {
 
   @Override
   public Object run() {
-    RequestContext ctx = RequestContext.getCurrentContext();
-    HttpServletRequest request = ctx.getRequest();
-
-    log.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
-
+	  RequestContext ctx = RequestContext.getCurrentContext();
+	  String header = rq.getHeader("Authorization");
+      ctx.addZuulRequestHeader("Authorization", header);
     return null;
   }
 
